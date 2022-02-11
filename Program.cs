@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PrescriptionAPI;
 using PrescriptionAPI.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<DbUpdater>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,6 +23,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+var scope = app.Services.CreateScope();
+var dbUpdater = scope.ServiceProvider.GetRequiredService<DbUpdater>();
+dbUpdater.Update();
 
 app.UseHttpsRedirection();
 
