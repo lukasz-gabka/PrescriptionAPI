@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using PrescriptionAPI;
 using PrescriptionAPI.Entities;
+using PrescriptionAPI.Services;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<DbUpdater>();
+builder.Services.AddScoped<PrescriptionService>();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
