@@ -22,4 +22,20 @@ public class PrescriptionController : ControllerBase
 
         return Created($"api/prescpiption/{id}", null);
     }
+
+    [HttpGet]
+    public ActionResult<IEnumerable<PrescriptionDto>> Get()
+    {
+        var dtos = _service.GetAll();
+
+        return dtos is null || dtos.Count() == 0 ? NoContent() : Ok(dtos);
+    }
+
+    [HttpGet("{id}")]
+    public ActionResult<PrescriptionDto> Get([FromRoute] int id)
+    {
+        var dto = _service.GetById(id);
+
+        return dto is null ? NoContent() : dto;
+    }
 }

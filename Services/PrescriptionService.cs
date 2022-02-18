@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PrescriptionAPI.Entities;
 using PrescriptionAPI.Models;
 
@@ -23,5 +24,30 @@ public class PrescriptionService
         _dbContext.SaveChanges();
 
         return prescription.Id;
+    }
+
+    public IEnumerable<PrescriptionDto> GetAll()
+    {
+        var prescriptions = _dbContext.Prescriptions
+            .Include(p => p.Patients)
+            .ThenInclude(p => p.Medicines)
+            .ToList();
+
+        var dtos = _mapper.Map<IEnumerable<PrescriptionDto>>(prescriptions);
+
+        return dtos;
+    }
+
+    public PrescriptionDto GetById(int id)
+    {
+        var prescription = _dbContext.Prescriptions
+            .Where(p => p.Id == id)
+            .Include(p => p.Patients)
+            .ThenInclude(p => p.Medicines)
+            .FirstOrDefault();
+
+        var dto = _mapper.Map<PrescriptionDto>(prescription);
+
+        return dto;
     }
 }

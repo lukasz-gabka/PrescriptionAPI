@@ -11,5 +11,9 @@ public class MappingProfile : Profile
         CreateMap<CreatePrescriptionDto, Prescription>();
         CreateMap<CreatePatientDto, Patient>();
         CreateMap<CreateMedicineDto, Medicine>();
+
+        CreateMap<Prescription, PrescriptionDto>().ReverseMap();
+        CreateMap<Patient, PatientDto>().ReverseMap();
+        CreateMap<Medicine, MedicineDto>().ReverseMap();
     }
 }
