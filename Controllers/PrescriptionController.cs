@@ -36,6 +36,14 @@ public class PrescriptionController : ControllerBase
     {
         var dto = _service.GetById(id);
 
-        return dto is null ? NoContent() : dto;
+        return dto is null ? NotFound() : dto;
+    }
+
+    [HttpPut("{id}")]
+    public ActionResult Update([FromRoute] int id, [FromBody] PrescriptionDto dto)
+    {
+        var isUpdated = _service.Update(id, dto);
+
+        return isUpdated ? NoContent() : NotFound();
     }
 }

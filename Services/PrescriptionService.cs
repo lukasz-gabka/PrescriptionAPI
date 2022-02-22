@@ -50,4 +50,25 @@ public class PrescriptionService
 
         return dto;
     }
+
+    public bool Update(int id, PrescriptionDto dto)
+    {
+        var prescription = _dbContext.Prescriptions
+            .Where(p => id == p.Id)
+            .Include(p => p.Patients)
+            .ThenInclude(p => p.Medicines)
+            .FirstOrDefault();
+
+        if (prescription is null)
+        {
+            return false;
+        }
+
+        prescription.IsActive = dto.IsActive;
+        prescription.Patients = _mapper.Map<IEnumerable<Patient>>(dto.Patients);
+
+        _dbContext.SaveChanges();
+
+        return true;
+    }
 }
